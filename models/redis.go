@@ -23,7 +23,7 @@ var pool = &redis.Pool{
 func SetRedis(key string,value string){
 	conn := pool.Get()
 	defer conn.Close()
-	_, err = conn.Do("SET",key, value)
+	_, err := conn.Do("SET",key, value)
 	if err != nil {
 		fmt.Println("redis set failed:", err)
 	}

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	m"blog/models"
+	m "blog/models"
 )
 
 //DataController data
@@ -24,12 +24,14 @@ func (c *DataController) HandleLogin() {
 
 //HandleRegister 处理注册
 func (c *DataController) HandleRegister() {
-	username, password := c.GetString("username"), c.GetString("pwd")
-	if CheckRedis(username){
+	username, password , nickname := c.GetString("username"), c.GetString("pwd") , c.GetString("nickname")
+	if m.CheckRedis(username){
 		c.Data["json"] = map[string]interface{}{"status": false, "msg": "用户名已存在"}
 	}else{
-		
-		
+		var user m.UserInfo
+		user.Username = username
+		user.Nickname = nickname
+		user.Password = password
 	}
 	
 }

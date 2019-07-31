@@ -30,6 +30,15 @@
                     <img alt="" src='/static/img/tick.png'>
                   </div>
                 </div>
+                <div class='login_fields__user'>
+                    <div class='icon'>
+                      <img alt="" src='/static/img/user_icon_copy.png'>
+                    </div>
+                    <input id="nickName" name="login" placeholder='昵称' maxlength="16" type='text' autocomplete="off" />
+                    <div class='validation'>
+                      <img alt="" src='/static/img/tick.png'>
+                    </div>
+                  </div>
                 <div class='login_fields__password'>
                   <div class='icon'>
                     <img alt="" src='/static/img/lock_icon_copy.png'>
@@ -218,17 +227,20 @@ layui.use('layer', function () {
         var username = $('#registerName').val();
         var pwd = $('registerPwd').val();
         var pwd2 = $('registerPwd').val();
+        var nickName = $('nickName').val();
         if (username == '') {
             ErroAlert('请输入您的账号');
         } else if (pwd == '') {
             ErroAlert('请输入密码');
+        } else if (nickName == ''){
+            ErroAlert('请输入昵称');
         } else if (pwd2 == ''){
             ErroAlert('请再输入一次密码');
         } else if (pwd != pwd2) {
             ErroAlert('两次输入的密码不一致');
         }
         else {
-            var JsonData = { username: username, pwd: pwd };
+            var JsonData = { username: username, pwd: pwd, nickname: nickName};
             $.ajax({
                    type: 'post',
                    url: '/HandleRegister',
@@ -236,8 +248,9 @@ layui.use('layer', function () {
                    success: function(res) {
                        if(res.status) {
                            layer.msg(res.msg, {time: 1000, icon: 6}, function() {
-                               //注册成功
                            });
+                           $("#registerDiv").hide();
+                           $("#loginDiv").show();                          
                        } else {
                            layer.msg(res.msg, {time: 1500, icon: 5});
                             //注册失败
@@ -293,6 +306,7 @@ layui.use('layer', function () {
                    success: function(res) {
                        if(res.status) {
                            layer.msg(res.msg, {time: 1000, icon: 6}, function() {
+                                
                                location.href = '/';
                            });
                        } else {
@@ -340,7 +354,9 @@ layui.use('layer', function () {
                             $('.login div').fadeOut(100);
                             $('.success').fadeIn(1000);
                             $('.success').html(data.Text);
+                            document.write(location.href);
 							//跳转操作
+                            window.location.href="/home";
 							
                         } else {
                             AjaxErro(data);
