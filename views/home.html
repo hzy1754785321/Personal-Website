@@ -1,0 +1,27 @@
+{{template "head.html" .}}
+
+<div class="blog-body">
+    <!-- canvas -->
+    <canvas id="canvas-banner" style="background: #393D49;"></canvas>
+    <script type="text/javascript">
+        var canvas = document.getElementById('canvas-banner');
+        canvas.width = window.document.body.clientWidth ;
+        if (screen.width >= 992) {
+            canvas.height = window.innerHeight * 1 / 60;
+        } else {
+            canvas.height = window.innerHeight * 2 / 100;
+        }
+      </script>
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label">请输入</label>
+  <div class="layui-input-block"></div>
+    <input type="text" name="title" autocomplete="off" placeholder="请输入" class="layui-input">
+</div>
+
+<script color="0,0,0" opacity="0.5" count="99" src="/static/js/canvas-nest.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/plugin/layui/layui.js" charset="utf-8"></script>
+
+</body>
+</html>
