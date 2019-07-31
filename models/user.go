@@ -1,15 +1,16 @@
 package models
 
-import "time"
+import("time")
 
-type User struct {
+//UserInfo w
+type UserInfo struct {
 	Username string
 	Nickname string
 	Password string
 //	Email string
 	LoginCount int
 	LastTime time.Time
-	LastIp string
+	LastIP string
 //	State int8
 	Created time.Time
 //	Updated time.Time
