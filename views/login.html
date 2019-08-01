@@ -119,8 +119,8 @@
             </div>
           </div>
 
-	
-	</div>
+    </div>
+    <div class='success'></div>
 </div>
 <div class='authent'>
   <div class="loader" style="height: 44px;width: 44px;margin-left: 28px;">
@@ -212,11 +212,11 @@ $('#registerDiv').hide();
 
 var open = 0;
 layui.use('layer', function () {
-	var msgalert = '默认账号:' + truelogin + '<br/> 默认密码:' + truepwd;
-	var index = layer.alert(msgalert, { icon: 6, time: 4000, offset: 't', closeBtn: 0, title: '友情提示', btn: [], anim: 2, shade: 0 });  
-	layer.style(index, {
-		color: '#777'
-	}); 
+	// var msgalert = '默认账号:' + truelogin + '<br/> 默认密码:' + truepwd;
+	// var index = layer.alert(msgalert, { icon: 6, time: 4000, offset: 't', closeBtn: 0, title: '友情提示', btn: [], anim: 2, shade: 0 });  
+	// layer.style(index, {
+	// 	color: '#777'
+	// }); 
 
     $('#register').click(function (){
         $("#loginDiv").hide(); 
@@ -225,9 +225,9 @@ layui.use('layer', function () {
 
     $('#registerSubmit').click(function () {
         var username = $('#registerName').val();
-        var pwd = $('registerPwd').val();
-        var pwd2 = $('registerPwd').val();
-        var nickName = $('nickName').val();
+        var pwd = $('#registerPwd').val();
+        var pwd2 = $('#registerPwd2').val();
+        var nickName = $('#nickName').val();
         if (username == '') {
             ErroAlert('请输入您的账号');
         } else if (pwd == '') {
@@ -272,11 +272,12 @@ layui.use('layer', function () {
             ErroAlert('请输入您的账号');
         } else if (pwd == '') {
             ErroAlert('请输入密码');
-        } else if (code == '' || code.length != 4) {
+        } else if (code == '') {
             ErroAlert('输入验证码');
+        } else if (code.toUpperCase() != CodeVal.toUpperCase()){
+                ErroAlert('验证码错误');
         } else {
             //认证中..
-         //   fullscreen();
             $('.login').addClass('test'); //倾斜特效
             setTimeout(function () {
                 $('.login').addClass('testtwo'); //平移特效
@@ -293,9 +294,7 @@ layui.use('layer', function () {
                 }).addClass('visible');
             }, 500);
 
-            //登陆
-            var JsonData = { login: login, pwd: pwd, code: code };
-			//此处做为ajax内部判断
+            var JsonData = { login: login, pwd: pwd};
 			var url = "";
             
 
@@ -304,65 +303,39 @@ layui.use('layer', function () {
                    url: '/handleLogin',
                    data: JsonData,
                    success: function(res) {
-                       if(res.status) {
-                           layer.msg(res.msg, {time: 1000, icon: 6}, function() {
-                                
-                               location.href = '/';
-                           });
-                       } else {
-                           layer.msg(res.msg, {time: 1500, icon: 5});
-                       }
+                    setTimeout(function () {
+                            $('.authent').show().animate({ right: 90 }, {
+                            easing: 'easeOutQuint',
+                            duration: 600,
+                            queue: false
+                            });
+                            $('.authent').animate({ opacity: 0 }, {
+                            duration: 200,
+                            queue: false
+                             }).addClass('visible');
+                            $('.login').removeClass('testtwo'); //平移特效
+                        }, 2000);
+                        setTimeout(function () {
+                            $('.authent').hide();
+                            $('.login').removeClass('test');
+                            if(res.status) {                           
+                           //     layer.msg(res.msg, {time: 1000, icon: 6});
+                                $('.login div').fadeOut(100);
+                                $('.success').fadeIn(800);
+                                $('.success').html(res.msg);
+                                setTimeout(function () {
+                                window.location.href="/home";
+                                }, 3400);
+                            }else {
+                                layer.msg(res.msg, {time: 1500, icon: 5});
+                            }
+                        }, 2400);
                    },
                    error: function() {
                        console.warn('request interface is failure.');
                    }
                })
-        
-
-
-			if(JsonData.login == truelogin && JsonData.pwd == truepwd && JsonData.code.toUpperCase() == CodeVal.toUpperCase()){
-				url = "Ajax/Login";
-			}else{
-				url = "Ajax/LoginFalse";
-			}
-			
-			
-            AjaxPost(url, JsonData,
-                function () {
-                    //ajax加载中
-                },
-                function (data) {
-                    //ajax返回 
-                    //认证完成
-                    setTimeout(function () {
-                        $('.authent').show().animate({ right: 90 }, {
-                            easing: 'easeOutQuint',
-                            duration: 600,
-                            queue: false
-                        });
-                        $('.authent').animate({ opacity: 0 }, {
-                            duration: 200,
-                            queue: false
-                        }).addClass('visible');
-                        $('.login').removeClass('testtwo'); //平移特效
-                    }, 2000);
-                    setTimeout(function () {
-                        $('.authent').hide();
-                        $('.login').removeClass('test');
-                        if (data.Status == 'ok') {
-                            //登录成功
-                            $('.login div').fadeOut(100);
-                            $('.success').fadeIn(1000);
-                            $('.success').html(data.Text);
-                            document.write(location.href);
-							//跳转操作
-                            window.location.href="/home";
-							
-                        } else {
-                            AjaxErro(data);
-                        }
-                    }, 2400);
-            	})
+						
         }
     })
 })
@@ -378,20 +351,20 @@ layui.use('layer', function () {
 //         //浏览器不支持全屏API或已被禁用  
 //     }
 // }  
-if(ajaxmockjax == 1){
-	$.mockjax({  
-		url: 'Ajax/Login',  
-		status: 200,  
-		responseTime: 50,          
-		responseText: {"Status":"ok","Text":"登陆成功<br /><br />欢迎回来"}  
-	}); 
-	$.mockjax({  
-		url: 'Ajax/LoginFalse',  
-		status: 200,  
-		responseTime: 50,          
-		responseText: {"Status":"Erro","Erro":"账号名或密码或验证码有误"}
-	});   
-}
+// if(ajaxmockjax == 1){
+// 	$.mockjax({  
+// 		url: 'Ajax/Login',  
+// 		status: 200,  
+// 		responseTime: 50,          
+// 		responseText: {"Status":"ok","Text":"登陆成功<br /><br />欢迎回来"}  
+// 	}); 
+// 	$.mockjax({  
+// 		url: 'Ajax/LoginFalse',  
+// 		status: 200,  
+// 		responseTime: 50,          
+// 		responseText: {"Status":"Erro","Erro":"账号名或密码或验证码有误"}
+// 	});   
+// }
 </script>
 </body>
 </html>

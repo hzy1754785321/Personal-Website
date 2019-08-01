@@ -8,34 +8,76 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <link href="/static/plugin/layui/css/layui.css" rel="stylesheet" media="all">
     </head>
-    <body>
+    <body class="layui-layout-body">
+        <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+        <script>
+            var sessionId = getCookie("sessionID")
+            var JsonData = { sessionID: sessionId};
+            $.ajax({
+                   type: 'post',
+                   url: '/GetSessionUserInfo',
+                   data: JsonData,
+                   success: function(res) {
+                    $("#nickName").text(res.Nickname);
+                   }
+                });
+
+                function getCookie(sName) {
+                    var aCookie = document.cookie.split("; ");
+                    for (var j = 0; j < aCookie.length; j++) {
+                        var aCrumb = aCookie[j].split("=");
+                        if (escape(sName) == aCrumb[0])
+                            return unescape(aCrumb[1]);
+                    }
+                    return null;
+                }
+                // layui.use('element', function(){
+                // var element = layui.element;
+                // });
+  
+        </script>
 
    <nav class="blog-nav layui-header">
-    <div class="blog-container">
-        <!-- QQ互联登陆 -->
-        <!-- <a href="javascript:;" class="blog-user">
-            <i class="fa fa-qq"></i>
-        </a>
-        <a href="javascript:;" class="blog-user layui-hide">
-            <img src="/static/img/network.png" alt="Absolutely" title="Absolutely" />
-        </a> -->
-        <!-- 不落阁 -->
-        <!-- <a class="blog-logo" href="home.html">ES-博客</a> -->
-        <!-- 导航菜单 -->
-        <ul class="layui-nav" lay-filter="nav">
-            <li class="layui-nav-item layui-this">
-                <a href="home.html"><i class="fa fa-home fa-fw"></i>&nbsp;主页</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="article.html"><i class="fa fa-file-text fa-fw"></i>&nbsp;文章</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="resource.html"><i class="fa fa-tags fa-fw"></i>&nbsp;资源分享</a>
-            </li>
-            <li class="layui-nav-item">
-                <a href="timeline.html"><i class="fa fa-hourglass-half fa-fw"></i>&nbsp;项目</a>
-            </li>
-        </ul>
+     <!-- <div class="blog-container"> -->
+                    <div class="layui-layout layui-layout-admin">
+                      <div class="layui-header">
+                        <!-- <div class="layui-logo">layui 后台布局</div> -->
+                        <ul class="layui-nav layui-layout-admin">
+                          <li class="layui-nav-item"><a href="">主页</a></li>
+                          <li class="layui-nav-item"><a href="">资源分享</a></li>
+                          <li class="layui-nav-item"><a href="">关于</a></li>
+                          <li class="layui-nav-item">
+                            <a href="javascript:;">其它系统
+                                    <span class="layui-nav-more"></span>
+                                    </a>
+                                    <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                                        <dd><a href="">邮件管理</a></dd>
+                                        <dd><a href="">消息管理</a></dd>
+                                        <dd><a href="">授权管理</a></dd>
+                                    </dl>       
+                          </li>
+                          <span class="layui-nav-bar" style="left: 314px; top: 55px; width: 0px; opacity: 0;"></span>
+                        </ul>
+
+                        
+                        <ul class="layui-nav layui-layout-right">
+                          <li class="layui-nav-item">
+                            <a href="javascript:;">
+                              <img src="/static/img/pic.jpg" class="layui-nav-img">
+                              <span id="nickName"></span>
+                            </a>
+                            <dl class="layui-nav-child">
+                              <dd><a href="">基本资料</a></dd>
+                              <dd><a href="">安全设置</a></dd>
+                            </dl>
+                          </li>
+                          <li class="layui-nav-item"><a href="">退了</a></li>
+                        </ul>
+                      </div>
+                  
+
+            
+
         <!-- 手机和平板的导航开关 -->
         <a class="blog-navicon" href="javascript:;">
             <i class="fa fa-navicon"></i>
