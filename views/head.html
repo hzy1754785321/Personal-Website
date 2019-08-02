@@ -10,6 +10,7 @@
     </head>
     <body class="layui-layout-body">
         <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+        <script src="/static/plugin/layui/layui.js" charset="utf-8"></script>
         <script>
             var sessionId = getCookie("sessionID")
             var JsonData = { sessionID: sessionId};
@@ -31,35 +32,34 @@
                     }
                     return null;
                 }
-                // layui.use('element', function(){
-                // var element = layui.element;
-                // });
-  
+                
+        layui.use('element', function(){
+        var element = layui.element;
+        });
+
         </script>
 
-   <nav class="blog-nav layui-header">
+    
+   <nav class="blog-nav layui-header" id="header">
      <!-- <div class="blog-container"> -->
                     <div class="layui-layout layui-layout-admin">
                       <div class="layui-header">
                         <!-- <div class="layui-logo">layui 后台布局</div> -->
                         <ul class="layui-nav layui-layout-admin">
-                          <li class="layui-nav-item"><a href="">主页</a></li>
+                          <li class="layui-nav-item"><a href="/home">主页</a></li>
                           <li class="layui-nav-item"><a href="">资源分享</a></li>
                           <li class="layui-nav-item"><a href="">关于</a></li>
                           <li class="layui-nav-item">
-                            <a href="javascript:;">其它系统
-                                    <span class="layui-nav-more"></span>
-                                    </a>
-                                    <dl class="layui-nav-child layui-anim layui-anim-upbit">
-                                        <dd><a href="">邮件管理</a></dd>
-                                        <dd><a href="">消息管理</a></dd>
-                                        <dd><a href="">授权管理</a></dd>
-                                    </dl>       
+                            <a href="javascript:;">其它系统</a>
+                            <dl class="layui-nav-child">
+                              <dd><a href="">邮件管理</a></dd>
+                              <dd><a href="">消息管理</a></dd>
+                              <dd><a href="">授权管理</a></dd>
+                            </dl>
                           </li>
-                          <span class="layui-nav-bar" style="left: 314px; top: 55px; width: 0px; opacity: 0;"></span>
                         </ul>
 
-                        
+
                         <ul class="layui-nav layui-layout-right">
                           <li class="layui-nav-item">
                             <a href="javascript:;">
@@ -67,11 +67,11 @@
                               <span id="nickName"></span>
                             </a>
                             <dl class="layui-nav-child">
-                              <dd><a href="">基本资料</a></dd>
+                              <dd><a href="/personal">基本资料</a></dd>
                               <dd><a href="">安全设置</a></dd>
                             </dl>
                           </li>
-                          <li class="layui-nav-item"><a href="">退了</a></li>
+                          <li class="layui-nav-item"><a href="">注销</a></li>
                         </ul>
                       </div>
                   

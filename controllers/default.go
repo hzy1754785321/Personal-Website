@@ -28,6 +28,16 @@ func (c *MainController) Home()  {
 	c.TplName= "home.html"
 }
 
+func (c *MainController) Personal()  {
+
+	c.TplName= "personal/personal.html"
+}
+
+func (c *MainController) UserInfo()  {
+
+	c.TplName= "personal/userInfo.html"
+}
+
 //getClientIp 获取用户IP地址
 func (p *MainController) getClientIp() string {
 	s := strings.Split(p.Ctx.Request.RemoteAddr, ":")
