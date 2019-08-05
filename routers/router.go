@@ -13,4 +13,5 @@ func init() {
 	beego.Router("/GetSessionUserInfo", &controllers.DataController{}, "post:GetSessionUserInfo")
 	beego.Router("/personal", &controllers.MainController{}, "*:Personal")
 	beego.Router("/personal/userInfo", &controllers.MainController{}, "*:UserInfo")
+	beego.Router("/personal/security", &controllers.MainController{}, "*:Security")
 }

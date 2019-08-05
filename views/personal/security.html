@@ -1,0 +1,63 @@
+{{template "/personal/personal.html" .}}
+
+<style>
+        .site-doc-icon li{width: 222px;}
+        .site-doc-icon li .layui-anim{width: 150px; height: 150px; line-height: 150px; margin: 0 auto 10px; text-align: center; background-color: #009688; cursor: pointer; color: #fff; border-radius: 50%;}
+</style>
+
+<div id="security" class="security-body">
+        
+        
+<script type="text/javascript">
+    var secCanvas = document.getElementById('security'); 
+    var canvas = document.getElementById('canvas-banner');
+    var nav = document.getElementById('testNav');
+    var header =  document.getElementById('header');
+    secCanvas.style.marginLeft = nav.offsetWidth + "px";
+    canvas.height = window.innerHeight * 1 / 60;
+    if (screen.width >= 992) {
+        canvas.height = window.innerHeight * 1 / 60;
+    } else {
+        canvas.height = window.innerHeight * 2 / 100;
+    }
+    canvas.width = window.document.body.clientWidth;
+
+</script>
+
+
+
+<div class="layui-main" style="width: 100%;height: 100%;">
+        <br><br><br>
+        <label class="label" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">安全级别</label>
+        <br>
+</div>
+
+<p align="center">
+<ul class="site-doc-icon site-doc-anim" >
+        <li style="width: 100%;height: 100%; text-align: center">
+            <div class="layui-anim" data-anim="layui-anim-scale">
+                <label class="label" style="font-size:30px;font-family:'微软雅黑';">高</label>
+            </div>
+        </li>
+</ul>
+
+
+</div>
+
+<script>
+        layui.use('jquery', function(){
+            var $ = layui.$;
+      
+            //演示动画
+            $('.site-doc-icon .layui-anim').on('load', function(){
+                var othis = $(this), anim = othis.data('anim');
+      
+
+      
+                setTimeout(function(){
+                    othis.addClass(anim);
+                });            
+            });
+        });
+        $(".site-doc-icon .layui-anim").load();
+</script>

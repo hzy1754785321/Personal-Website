@@ -19,7 +19,6 @@
                 var canvas = document.getElementById('canvas-banner');
                 var nav = document.getElementById('testNav');
                 var header =  document.getElementById('header');
-          //      perCanvas.style.marginTop = header.offsetHeight + "px";
                 perCanvas.style.marginLeft = nav.offsetWidth + "px";
                 canvas.height = window.innerHeight * 1 / 60;
                 if (screen.width >= 992) {
@@ -70,8 +69,47 @@
                 </div>
         </fieldset>
 
- 
     </div>
+    <script>
+                layui.use(['util', 'laydate', 'layer'], function(){
+                  var util = layui.util
+                  ,laydate = layui.laydate
+                  ,layer = layui.layer;
+                  //固定块
+                  util.fixbar({
+                    bar1: "&#xe642;"
+                    ,css: {right: 50, bottom: 100}
+                    ,bgcolor: '#393D49'
+                    ,click: function(type){
+                      if(type === 'bar1'){
+                        function testFun() {
+                                layer.open({
+                                        type: 1,
+                                        shift: 7,
+                                        title: false,
+                                        shadeClose: true,
+                                        closeBtn: false,
+                                        skin: 'layui-elem-field',
+                                        content: "<fieldset class='layui-elem-field site-demo-button' style='margin-top: 30px;'>" +
+                                        "<legend>修改个人信息</legend>" +
+                                        "<div class='layui-inline'>" +
+                                        "<label class='layui-form-label'>验证日期</label>" +
+                                        "<div class='layui-input-inline'>" +
+                                        "<input type='text' id='date' name='date' id='date' lay-verify='date' placeholder='yyyy-MM-dd' autocomplete='off' class='layui-input'>" +
+                                        "</div>" +
+                                        "</div>"
+                                });
+                                laydate.render({
+                                        elem: '#date'
+                                        });
+                 
+                        }
+                        testFun();
+                      } 
+                    }
+                  });             
+                });
+                </script>
     <canvas id="canvas-banner" style="background: rgb(255, 255, 255);">
       
           
