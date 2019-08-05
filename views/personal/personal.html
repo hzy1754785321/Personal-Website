@@ -1,0 +1,53 @@
+{{template "head.html" .}}
+
+
+    <!-- canvas -->
+
+    <canvas id="canvas-banner" style="background: rgb(252, 252, 252);"></canvas>
+
+
+<ul id="testNav" class="layui-nav layui-nav-tree layui-nav-side" lay-filter="test">
+      <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">个人中心</a>
+        <dl class="layui-nav-child">
+          <dd><a href="/personal/userInfo">
+              <i class="layui-icon">&#xe66f;</i>&nbsp;&nbsp;&nbsp;个人信息</a></dd>
+          <dd><a href="javascript:;">
+              <i class="layui-icon">&#xe672;</i>&nbsp;&nbsp;&nbsp;安全中心</a></dd>
+          <dd><a href="javascript:;">
+              <i class="layui-icon">&#xe6af;</i>&nbsp;&nbsp;&nbsp;我的头像</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">信息中心</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">
+              <i class="layui-icon">&#xe621;</i>&nbsp;&nbsp;&nbsp;我的发布</a></dd>
+          <dd><a href="">
+              <i class="layui-icon">&#xe63a;</i>&nbsp;&nbsp;&nbsp;我的评论</a></dd>
+          <dd><a href="">
+              <i class="layui-icon">&#xe667;</i>&nbsp;&nbsp;&nbsp;我的消息</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">账号记录</a></li>
+    </ul>
+          
+    <script type="text/javascript">
+      var canvas = document.getElementById('canvas-banner');
+      var nav = document.getElementById('testNav');
+      var header =  document.getElementById('header');
+      nav.style.marginTop = header.offsetHeight + "px";
+
+      canvas.height = nav.offsetHeight;
+    
+  </script>
+
+
+    <script color="0,0,0" opacity="0.8" count="120" src="/static/js/canvas-nest.js" type="text/javascript" charset="utf-8"></script>
+    
+    
+    
+    
+    
+    </body>
+    </html>
