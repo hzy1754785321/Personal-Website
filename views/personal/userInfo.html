@@ -1,6 +1,6 @@
 {{template "/personal/personal.html" .}}
 
-    
+<body>   
 
 <div id="personal" class="personal-body">
 
@@ -13,8 +13,10 @@
                   <input type="text" name="title" autocomplete="off" placeholder="请输入" class="layui-input">
         </div> -->
                  
-
-              <script type="text/javascript">
+              <script>
+                var provinceTag;
+                var cityTag;
+                var areaTag;
                 var perCanvas = document.getElementById('personal'); 
                 var canvas = document.getElementById('canvas-banner');
                 var nav = document.getElementById('testNav');
@@ -68,13 +70,28 @@
                  未填写
                 </div>
         </fieldset>
-
+        <fieldset class="layui-elem-field">
+                <legend>爱好</legend>
+                <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
+                 未填写
+                </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+                <legend>我的签名</legend>
+                <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
+                这个人很懒,什么都没写
+                </div>
+        </fieldset>
     </div>
     <script>
-                layui.use(['util', 'laydate', 'layer'], function(){
+
+               
+                layui.use(['util', 'laydate', 'layer','form'], function(){
                   var util = layui.util
                   ,laydate = layui.laydate
-                  ,layer = layui.layer;
+                  ,layer = layui.layer
+                  ,form = layui.form
+
                   //固定块
                   util.fixbar({
                     bar1: "&#xe642;"
@@ -89,28 +106,95 @@
                                         title: false,
                                         shadeClose: true,
                                         closeBtn: false,
+                                        area:["380px","585px"],
                                         skin: 'layui-elem-field',
                                         content: "<fieldset class='layui-elem-field site-demo-button' style='margin-top: 30px;'>" +
-                                        "<legend>修改个人信息</legend>" +
-                                        "<div class='layui-inline'>" +
-                                        "<label class='layui-form-label'>验证日期</label>" +
-                                        "<div class='layui-input-inline'>" +
-                                        "<input type='text' id='date' name='date' id='date' lay-verify='date' placeholder='yyyy-MM-dd' autocomplete='off' class='layui-input'>" +
-                                        "</div>" +
-                                        "</div>"
+                                                        "<legend>修改个人信息</legend>" +
+                                                "</fieldset>" +
+                                                "<form class='layui-form layui-form-pane' action='' '>" +                                      
+                                                        "<div class='layui-form-item' pane=''>" +
+                                                                "<label class='layui-form-label'>出生年月</label>" +
+                                                                "<div class='layui-input-inline'>" +
+                                                                        "<input type='text' id='date' name='date' id='date' lay-verify='date' placeholder='yyyy-MM-dd' autocomplete='off' class='layui-input'>" +
+                                                                "</div>" +
+                                                        "</div>" + 
+                                                        "<div class='layui-form-item' pane=''>" +
+                                                                "<label class='layui-form-label'>所在地址</label>" +
+                                                                "<div class='layui-input-inline'>" +
+                                                                        "<select id='province' lay-filter='province1' name='province'>" +
+                                                                                "<option value=''>请选择省</option>" +
+                                                                        "</select>" +
+                                                                        "<select id='city' lay-filter='city1' name='city'>" +
+                                                                                "<option value=''>请选择市</option>" +
+                                                                        "</select>" +
+                                                                        "<select id='area' lay-filter='area' name='area'>" +
+                                                                                "<option value=''>请选择区</option>" +
+                                                                        "</select>" +
+                                                                "</div>" +
+                                                        "</div>" +                                  
+                                                        "<div class='layui-form-item' pane=''>" +
+                                                                "<label class='layui-form-label'>性别</label>" +
+                                                                "<div class='layui-input-block'>" + 
+                                                                        "<input type='radio' name='sex' value='男' title='男' checked=''>" +
+                                                                        "<input type='radio' name='sex' value='女' title='女'>" +
+                                                                        "<input type='radio' name='sex' value='外星人' title='外星人'>" +
+                                                                "</div>" +
+                                                        "</div>" +
+                                                        "<div class='layui-form-item'  pane=''>" +
+                                                                "<label class='layui-form-label'>爱好</label>" +
+                                                                "<div class='layui-input-block'>" +
+                                                                        "<input type='checkbox' name='like[game]' title='游戏'>" +
+                                                                        "<input type='checkbox' name='like[read]' title='看书'>" +
+                                                                        "<input type='checkbox' name='like[animal]' title='动漫'>" +
+                                                                        "<input type='checkbox' name='like[movie]' title='电影'>" +
+                                                                        "<input type='checkbox' name='like[daze]' title='发呆'>" +
+                                                                "</div>" +
+                                                        "</div>" +
+                                                        "<div class='layui-form-item' pane=''>" +
+                                                                "<label class='layui-form-label'>我的签名</label>" +
+                                                                "<div class='layui-input-block'>" +
+                                                                        "<textarea placeholder='请输入签名' class='layui-textarea'></textarea>" +
+                                                                "</div>" +
+                                                        "</div>" +
+                                                "</from>" +
+                                                "<div style='margin-left: 70px;'>" + 
+                                                "<button type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-lg'>确定</button>" +
+                                                "<button style='margin-left: 60px;' id='cancel' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-lg'>取消</button>" +
+                                                "</div>"
+                                                                              
                                 });
                                 laydate.render({
                                         elem: '#date'
-                                        });
-                 
+                                });
+                                $('#cancel').click(function (){
+                                        layer.closeAll();
+                                });                                             
                         }
-                        testFun();
+                        testFun();              
+                        provinceTag = document.getElementById("province");
+                        cityTag = document.getElementById("city");
+                        areaTag = document.getElementById("area");      
+                        addProvince();
+                        provinceTag.selectedIndex = 1;
+                        form.on('select(province1)',  function(data){
+                          chooseProvince(provinceTag);
+                          form.render('select');
+                        });    
+                        form.on('select(city1)', function(data){
+                          chooseCity(cityTag);
+                          form.render('select');
+                        });       
+                        form.render();           
                       } 
                     }
                   });             
                 });
                 </script>
+
+   <script src="/static/js/city.js"></script>
     <canvas id="canvas-banner" style="background: rgb(255, 255, 255);">
-      
+</body>
+        
+        
           
 
