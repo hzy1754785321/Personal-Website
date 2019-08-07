@@ -14,4 +14,5 @@ func init() {
 	beego.Router("/personal", &controllers.MainController{}, "*:Personal")
 	beego.Router("/personal/userInfo", &controllers.MainController{}, "*:UserInfo")
 	beego.Router("/personal/security", &controllers.MainController{}, "*:Security")
+	beego.Router("/personal/icon", &controllers.MainController{}, "*:Icon")
 }

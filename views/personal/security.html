@@ -5,6 +5,7 @@
         .site-doc-icon li .layui-anim{width: 150px; height: 150px; line-height: 150px; margin: 0 auto 10px; text-align: center; background-color: #009688; cursor: pointer; color: #fff; border-radius: 50%;}
 </style>
 
+<body>
 <div id="security" class="security-body">
         
         
@@ -26,33 +27,90 @@
 
 
 
-<div class="layui-main" style="width: 100%;height: 100%;">
-        <br><br><br>
-        <label class="label" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">安全级别</label>
-        <br>
-</div>
+    <div class="layui-main" style="margin-top: 50px; width: 100%;height: 100%;">
+            <label class="label" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">安全级别</label>
+    </div>
 
-<p align="center">
-<ul class="site-doc-icon site-doc-anim" >
-        <li style="width: 100%;height: 100%; text-align: center">
-            <div class="layui-anim" data-anim="layui-anim-scale">
-                <label class="label" style="font-size:30px;font-family:'微软雅黑';">高</label>
+    <ul id="securityHeight" class="site-doc-icon site-doc-anim" style="margin-top: 15px;">
+            <li style="width: 100%;height: 100%; text-align: center">
+                <div class="layui-anim" data-anim="layui-anim-scale">
+                    <label class="label" style="font-size:30px;font-family:'微软雅黑';">高</label>
+                </div>
+            </li>
+    </ul>
+
+    <ul id="securityLow" class="site-doc-icon site-doc-anim" style="margin-top: 15px;">
+            <li style="width: 100%;height: 100%; text-align: center">
+                <div class="layui-anim layui-bg-red" data-anim="layui-anim-scale">
+                    <label class="label" style="font-size:30px;font-family:'微软雅黑';">低</label>
+                </div>
+            </li>
+    </ul>
+
+    <blockquote class="layui-elem-quote layui-quote-nm">
+            <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">       
+                    <span class="layui-badge-dot layui-bg-green" ></span>   
+                    <text>密码：</text>
+                    <a href="javascript:void(0);" onclick = "js_merthod()">已设置</a>
             </div>
-        </li>
-</ul>
+    </blockquote>
+    <blockquote class="layui-elem-quote layui-quote-nm">
+            <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">
+                    <span class="layui-badge-dot layui-bg-green" ></span>   
+                    <text>邮箱：</text>
+                    <a >1754785321@qq.com</a>
+                    <a href="javascript:void(0);" onclick = "js_merthod()">已绑定</a>
+            </div>
+    </blockquote>
+    <blockquote class="layui-elem-quote layui-quote-nm">
+            <div class="layui-inline" style="width:100%;margin-left: 41%;font-size: 20px;">       
+                    <span class="layui-badge-dot" ></span>  
+                    <text>手机号：</text>
+                    <a ></a>
+                    <a href="javascript:void(0);" onclick = "js_merthod()">未绑定</a>            
+            </div>
+    </blockquote>
+    <blockquote class="layui-elem-quote layui-quote-nm">
+            <div class="layui-inline" style="width:100%;margin-left: 39%;font-size: 20px;">       
+                    <span class="layui-badge-dot" ></span>  
+                    <text>密保问题：</text>
+                    <a ></a>
+                    <a href="javascript:void(0);" onclick = "js_merthod()">未设置</a>            
+            </div>
+    </blockquote>
+
 
 
 </div>
 
 <script>
+     var js_merthod = function(){
+        layui.use(['upload','layer'], function(){
+        var layer = layui.layer
+        ,upload = layui.upload;
+        var $ = layui.jquery        
+        layer.msg('上传失败');
+     });
+     }
+
+    $(document).ready(function(){
+        $('#securityLow').hide();
+    });
+    $("#securityHeight").click(function(){
+        $('#securityHeight').hide();
+        $('#securityLow').show();
+    });
+    $("#securityLow").click(function(){
+        $('#securityLow').hide();
+        $('#securityHeight').show();
+    });
+
         layui.use('jquery', function(){
             var $ = layui.$;
       
             //演示动画
             $('.site-doc-icon .layui-anim').on('load', function(){
                 var othis = $(this), anim = othis.data('anim');
-      
-
       
                 setTimeout(function(){
                     othis.addClass(anim);
@@ -61,3 +119,5 @@
         });
         $(".site-doc-icon .layui-anim").load();
 </script>
+
+</body>

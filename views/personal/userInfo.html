@@ -17,11 +17,14 @@
                 var provinceTag;
                 var cityTag;
                 var areaTag;
+               
                 var perCanvas = document.getElementById('personal'); 
                 var canvas = document.getElementById('canvas-banner');
                 var nav = document.getElementById('testNav');
                 var header =  document.getElementById('header');
+                var body =  document.getElementById('headBody');
                 perCanvas.style.marginLeft = nav.offsetWidth + "px";
+                body.offsetHeight = body.offsetHeight - header.offsetHeight;
                 canvas.height = window.innerHeight * 1 / 60;
                 if (screen.width >= 992) {
                     canvas.height = window.innerHeight * 1 / 60;
@@ -34,7 +37,7 @@
         <div class="layui-main">
             <p align="center"><img src="/static/img/pic.jpg" width="120" height="120" class="layui-circle"></p> 
             <br>
-            <label class="label" style="font-size:30px;font-family:'微软雅黑';;display: block;text-align: center;">helios</label>
+            <label class="label" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">helios</label>
         </div>
 
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
@@ -45,6 +48,12 @@
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
                  hzy1754785321
                 </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+                        <legend>昵称</legend>
+                        <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
+                         hzy
+                        </div>
         </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>注册时间</legend>
@@ -58,6 +67,18 @@
                  未填写
                 </div>
         </fieldset>
+        <fieldset class="layui-elem-field">
+                        <legend>性别</legend>
+                        <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
+                         未填写
+                        </div>
+                </fieldset>
+                <fieldset class="layui-elem-field">
+                                <legend>性别</legend>
+                                <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
+                                 未填写
+                                </div>
+                        </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>所在城市</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
