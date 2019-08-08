@@ -48,9 +48,3 @@ func (c *MainController) Icon()  {
 	c.TplName= "personal/icon.html"
 }
 
-//getClientIp 获取用户IP地址
-func (p *MainController) getClientIp() string {
-	s := strings.Split(p.Ctx.Request.RemoteAddr, ":")
-	return s[0]
-}
-

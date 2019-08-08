@@ -5,6 +5,8 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/astaxie/beego"
 	_ "github.com/astaxie/beego/session/redis"
+	"math/rand"
+	"time"
 )
 
 var globalSessions *session.Manager
@@ -26,6 +28,6 @@ func init() {
 
 
 func main() {
-	
+	rand.Seed(time.Now().UnixNano())
 	beego.Run()
 }

@@ -46,39 +46,27 @@
         <fieldset class="layui-elem-field">
                 <legend>账号</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                 hzy1754785321
+                        <span id="per_userName"></span>
                 </div>
         </fieldset>
         <fieldset class="layui-elem-field">
                         <legend>昵称</legend>
                         <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                         hzy
+                                <span id="per_nickName"></span>
                         </div>
         </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>注册时间</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                 2019.08.01
+                        <span id="per_create"></span>
                 </div>
         </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>性别</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                 未填写
+                        <span id="per_sex"></span>
                 </div>
         </fieldset>
-        <fieldset class="layui-elem-field">
-                        <legend>性别</legend>
-                        <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                         未填写
-                        </div>
-                </fieldset>
-                <fieldset class="layui-elem-field">
-                                <legend>性别</legend>
-                                <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                                 未填写
-                                </div>
-                        </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>所在城市</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
@@ -105,9 +93,36 @@
         </fieldset>
     </div>
     <script>
+                        function getCookie(sName) {
+                                var aCookie = document.cookie.split("; ");
+                                for (var j = 0; j < aCookie.length; j++) {
+                                        var aCrumb = aCookie[j].split("=");
+                                        if (escape(sName) == aCrumb[0])
+                                        return unescape(aCrumb[1]);
+                                }
+                                return null;
+                        }
+                        var sessionId = getCookie("sessionID")
+                        var JsonData = { sessionID: sessionId};
+                        $.ajax({
+                                        type: 'post',
+                                        url: '/GetSessionPersonal',
+                                        data: JsonData,
+                                        success: function(res) {
+                                        $("#per_nickName").text(res.Nickname);
+                                        $("#per_userName").text(res.Username);
+                                        $("#per_create").text(res.Created);
+                                        if(res.Sex == ''){
+                                                $("#per_sex").text("未填写");     
+                                        }else{
+                                                $("#per_sex").text(res.Sex);   
+                                        }
+                                }
+                        });
 
+                            
                
-                layui.use(['util', 'laydate', 'layer','form'], function(){
+                  layui.use(['util', 'laydate', 'layer','form'], function(){
                   var util = layui.util
                   ,laydate = layui.laydate
                   ,layer = layui.layer
@@ -127,12 +142,18 @@
                                         title: false,
                                         shadeClose: true,
                                         closeBtn: false,
-                                        area:["380px","585px"],
+                                        area:["380px","630px"],
                                         skin: 'layui-elem-field',
                                         content: "<fieldset class='layui-elem-field site-demo-button' style='margin-top: 30px;'>" +
                                                         "<legend>修改个人信息</legend>" +
                                                 "</fieldset>" +
-                                                "<form class='layui-form layui-form-pane' action='' '>" +                                      
+                                                "<form class='layui-form layui-form-pane' action='' '>" +
+                                                        "<div class='layui-form-item' pane=''>" +
+                                                                "<label class='layui-form-label'>昵称</label>" +
+                                                                "<div class='layui-input-inline'>" +
+                                                                        "<input type='text' id='name1' name='name' id='name' lay-verify='name' type='text' autocomplete='off' class='layui-input'>" +
+                                                                "</div>" +
+                                                        "</div>" +                                       
                                                         "<div class='layui-form-item' pane=''>" +
                                                                 "<label class='layui-form-label'>出生年月</label>" +
                                                                 "<div class='layui-input-inline'>" +
@@ -179,7 +200,7 @@
                                                         "</div>" +
                                                 "</from>" +
                                                 "<div style='margin-left: 70px;'>" + 
-                                                "<button type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-lg'>确定</button>" +
+                                                "<button id ='confirm' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-lg'>确定</button>" +
                                                 "<button style='margin-left: 60px;' id='cancel' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-lg'>取消</button>" +
                                                 "</div>"
                                                                               
@@ -187,9 +208,15 @@
                                 laydate.render({
                                         elem: '#date'
                                 });
+                                $('#name1').val($("#per_nickName").text());
+                                $('#date').val($("#per_create").text());
                                 $('#cancel').click(function (){
                                         layer.closeAll();
-                                });                                             
+                                });       
+                                $('#confirm').click(function (){
+                                        alert($('#date').val());
+                                        layer.closeAll();
+                                });                                         
                         }
                         testFun();              
                         provinceTag = document.getElementById("province");
@@ -212,10 +239,11 @@
                 });
                 </script>
 
-   <script src="/static/js/city.js"></script>
+    <script src="/static/js/city.js"></script>
     <canvas id="canvas-banner" style="background: rgb(255, 255, 255);">
+    
 </body>
-        
-        
+</html>
+
           
 

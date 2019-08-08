@@ -5,23 +5,33 @@ type UserInfo struct {
 	Username string
 	Nickname string
 	Password string
-//	Email string
-	LoginCount int
 	LastTime string
+	LoginCount int
 	LastIP string
-//	State int8
-	Created string
-//	Updated time.Time
 }
 
+type PersonalInfo struct{
+	Username string
+	Nickname string
+	Coin int
+	Sex string
+	Created string
+	City string  //市
+	Province string //省
+	Area string  //区
+	Birth string  
+	Like []string 
+	Sign string
+}
 
-var userData string = `{
-	"Username": "",
-	"Nickname": "",
-	"Password": "",
-	"LoginCount": 0,
-	"LastTime": "",
-	"LastIP": "",
-	"Created": "",
-}`
+type LoginInfo struct{
+	LastTime string
+	Coin int
+	LastIP string
+	LastAddress string
+}
+
+type LoginInfos struct{
+	Info []LoginInfo
+}
 

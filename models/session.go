@@ -8,5 +8,6 @@ package models
 
 //Session session信息
 type Session struct {
-	UserInfoData  UserInfo  `json:"UserInfo"` //用户信息
+	UserInfoData  UserInfo  `json:"UserInfo"` //用户登录信息
+	PersonalData PersonalInfo `json:"PersonalInfo"`  //用户基础信息
 }
