@@ -110,25 +110,35 @@ func (c *DataController) GetSessionPersonal() {
 	per := make(map[string]interface{})
 	json.Unmarshal(perjs, &per)
 	c.Data["json"] = per
-	// c.Data["json"] = map[string]interface{}{
-	// 	 "Username": person.Username ,
-	// 	 "Nickname": person.Nickname,
-	// 	 "Coin": person.Coin,
-	// 	 "Sex" : person.Sex,
-	// 	 "Created" : person.Created,
-	// 	 "City" : person.City,
-	// 	 "Province" : person.Province,
-	// 	 "Sex" : person.Sex,
-	// 	 "Sex" : person.Sex,
-	// 	 "Sex" : person.Sex,
-	// }
+	c.ServeJSON()
+}
+
+func (c *DataController) SavePersonal() {
+	var person m.PersonalInfo
+	sessionID := c.GetString("sessionID")
+	sessionTemp := c.GetSession(sessionID)
+	sessionDat, _ := sessionTemp.(string)
+	var session m.Session
+	json.Unmarshal([]byte(sessionDat),&session)
+	person = session.PersonalData
+	person.Nickname, person.Birth , person.Sex =   c.GetString("NickName") , c.GetString("Birth"), c.GetString("Sex")
+	if c.GetString("Province") != "" {
+		person.City , person.Province , person.Area  =  c.GetString("City"),  c.GetString("Province"), c.GetString("Area")
+	}
+	perjs, _ := json.Marshal(person)
+	m.SetRedis("personal" + person.Username,string(perjs))
+	session.UserInfoData = session.UserInfoData
+	session.PersonalData = person
+	sessionDats, _ := json.Marshal(session)
+	c.SetSession(sessionID,string(sessionDats))
+	c.Data["json"] = map[string]interface{}{"status": false, "msg": "修改成功！"}
 	c.ServeJSON()
 }
 
 //getClientIp 获取用户IP地址
 func (p *DataController) getClientIp() string {
 	var ip = p.Ctx.Input.IP()
-	fmt.Printf(ip)
+	fmt.Printf(ip)	
 	// s := strings.Split(p.Ctx.Request.RemoteAddr, ":")
 	return ip	
 }

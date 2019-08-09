@@ -37,7 +37,7 @@
         <div class="layui-main">
             <p align="center"><img src="/static/img/pic.jpg" width="120" height="120" class="layui-circle"></p> 
             <br>
-            <label class="label" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">helios</label>
+            <label class="label" id="per_nickName" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">helios</label>
         </div>
 
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
@@ -49,12 +49,12 @@
                         <span id="per_userName"></span>
                 </div>
         </fieldset>
-        <fieldset class="layui-elem-field">
+        <!-- <fieldset class="layui-elem-field">
                         <legend>昵称</legend>
                         <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
                                 <span id="per_nickName"></span>
                         </div>
-        </fieldset>
+        </fieldset> -->
         <fieldset class="layui-elem-field">
                 <legend>注册时间</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
@@ -70,13 +70,13 @@
         <fieldset class="layui-elem-field">
                 <legend>所在城市</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                 未填写
+                        <span id="per_city"></span>
                 </div>
         </fieldset>
         <fieldset class="layui-elem-field">
                 <legend>生日</legend>
                 <div class="layui-field-box" style="background:#F1FAFA; color:rgb(0, 0, 0);" >
-                 未填写
+                        <span id="per_birth"></span>
                 </div>
         </fieldset>
         <fieldset class="layui-elem-field">
@@ -102,6 +102,7 @@
                                 }
                                 return null;
                         }
+                        var RefrePersonal = function(){
                         var sessionId = getCookie("sessionID")
                         var JsonData = { sessionID: sessionId};
                         $.ajax({
@@ -117,17 +118,27 @@
                                         }else{
                                                 $("#per_sex").text(res.Sex);   
                                         }
+                                        if(res.Birth == ''){
+                                                $('#per_birth').text("未填写");
+                                        }else{
+                                                $('#per_birth').text(res.Birth);
+                                        }
+                                        if(res.Province == '' && res.City == '' && res.Area == ''){
+                                                $('#per_city').text("未填写");
+                                        }else{
+                                                var cityText = res.Province + "  " + res.City + "  " + res.Area;
+                                                $('#per_city').text(cityText);
+                                        }
                                 }
                         });
-
-                            
+                        }
+                        RefrePersonal();
                
                   layui.use(['util', 'laydate', 'layer','form'], function(){
                   var util = layui.util
                   ,laydate = layui.laydate
                   ,layer = layui.layer
                   ,form = layui.form
-
                   //固定块
                   util.fixbar({
                     bar1: "&#xe642;"
@@ -177,9 +188,9 @@
                                                         "<div class='layui-form-item' pane=''>" +
                                                                 "<label class='layui-form-label'>性别</label>" +
                                                                 "<div class='layui-input-block'>" + 
-                                                                        "<input type='radio' name='sex' value='男' title='男' checked=''>" +
-                                                                        "<input type='radio' name='sex' value='女' title='女'>" +
-                                                                        "<input type='radio' name='sex' value='外星人' title='外星人'>" +
+                                                                        "<input type='radio' id='man' name='sex' value='男' title='男' checked=''>" +
+                                                                        "<input type='radio' id='women' name='sex' value='女' title='女'>" +
+                                                                        "<input type='radio' id='ufo' name='sex' value='外星人' title='外星人'>" +
                                                                 "</div>" +
                                                         "</div>" +
                                                         "<div class='layui-form-item'  pane=''>" +
@@ -209,14 +220,46 @@
                                         elem: '#date'
                                 });
                                 $('#name1').val($("#per_nickName").text());
-                                $('#date').val($("#per_create").text());
+                                $('#date').val($("#per_birth").text());
                                 $('#cancel').click(function (){
                                         layer.closeAll();
                                 });       
                                 $('#confirm').click(function (){
-                                        alert($('#date').val());
+                                        var sessionId = getCookie("sessionID");
+                                        var nickName = $('#name1').val()
+                                        ,birth =  $('#date').val()
+                                        ,provincIndex = $('#province').val()
+                                        ,cityIndex = $('#city').val()
+                                        ,areaIndex =  $('#area').val()
+                                        ,sex
+                                        ,flagID = document.querySelectorAll("input[name='sex']")
+                                        ,aFlagID = new Array();      
+                                        for (var i = 0; i < flagID.length; i++) {
+                                           aFlagID.push(flagID[i].id);
+                                           if(flagID[i].checked == true) {
+                                                sex = $("#"+aFlagID[i]).val();
+                                           }
+                                         }
+                                        var provinces;
+                                        var city;
+                                        var area;
+                                        if(cityIndex != ""){
+                                                provinces = provinceTag.options[++provincIndex].text;
+                                                city = cityTag.options[cityIndex].text;
+                                                area = areaTag.options[areaIndex].text;
+                                        }
+                                       var JsonData = { sessionID: sessionId,NickName: nickName,Birth: birth,Province: provinces,City: city,Area: area,Sex: sex};
+                                                $.ajax({
+                                                        type: 'post',
+                                                        url: '/SavePersonal',
+                                                        data: JsonData,
+                                                        success: function(res) {                                   
+                                                                layer.msg(res.msg, {time: 1500, icon: 6});
+                                                }
+                                        });
+                                        RefrePersonal();
                                         layer.closeAll();
-                                });                                         
+                                });                                  
                         }
                         testFun();              
                         provinceTag = document.getElementById("province");
@@ -231,6 +274,7 @@
                         form.on('select(city1)', function(data){
                           chooseCity(cityTag);
                           form.render('select');
+
                         });       
                         form.render();           
                       } 

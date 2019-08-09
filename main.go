@@ -12,9 +12,9 @@ import (
 var globalSessions *session.Manager
 
 func init() {
-//	beego.BConfig.WebConfig.Session.SessionOn = true
+	//	beego.BConfig.WebConfig.Session.SessionOn = true
 	// sessionConfig := &session.ManagerConfig{
-	// 	CookieName:"sessionID", 
+	// 	Cookie	Name:"sessionID", 
 	// 	EnableSetCookie: true, 
 	// 	Gclifetime:3600,
 	// 	Maxlifetime: 3600, 

@@ -12,6 +12,7 @@ func init() {
 	beego.Router("/HandleRegister", &controllers.DataController{}, "post:HandleRegister")
 	beego.Router("/GetSessionUserInfo", &controllers.DataController{}, "post:GetSessionUserInfo")
 	beego.Router("/GetSessionPersonal", &controllers.DataController{}, "post:GetSessionPersonal")
+	beego.Router("/SavePersonal", &controllers.DataController{}, "post:SavePersonal")
 	beego.Router("/personal", &controllers.MainController{}, "*:Personal")
 	beego.Router("/personal/userInfo", &controllers.MainController{}, "*:UserInfo")
 	beego.Router("/personal/security", &controllers.MainController{}, "*:Security")
