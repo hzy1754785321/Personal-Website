@@ -51,14 +51,14 @@
             <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">       
                     <span class="layui-badge-dot layui-bg-green" ></span>   
                     <text>密码：</text>
-                    <a href="javascript:void(0);" onclick = "js_merthod()">已设置</a>
+                    <a href="javascript:void(0);" onclick = "passwdReset()">已设置</a>
             </div>
     </blockquote>
     <blockquote class="layui-elem-quote layui-quote-nm">
             <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">
                     <span class="layui-badge-dot layui-bg-green" ></span>   
                     <text>邮箱：</text>
-                    <a >1754785321@qq.com</a>
+                    <a ></a>
                     <a href="javascript:void(0);" onclick = "js_merthod()">已绑定</a>
             </div>
     </blockquote>
@@ -84,13 +84,33 @@
 </div>
 
 <script>
-     var js_merthod = function(){
-        layui.use(['upload','layer'], function(){
+     var passwdReset = function(){
+        layui.use(['layer','form'], function(){
         var layer = layui.layer
-        ,upload = layui.upload;
-        var $ = layui.jquery        
-        layer.msg('上传失败');
-     });
+        ,form = layui.form
+        layer.open({
+                                        type: 1,
+                                        shift: 7,
+                                        title: false,
+                                        shadeClose: true,
+                                        closeBtn: false,
+                                        area:["380px","330px"],
+                                        skin: 'layui-elem-field',
+                                        content:"<form class='layui-form layui-form-pane' action='' '>" +
+                                                    "<div class='layui-form-item'>" +
+                                                        "<div class='layui-input-inline'>" +                                                               
+                                                            "<input id='layerPwd' class='layui-input' name='pwd' placeholder='密码' maxlength='16' type='text' autocomplete='off'>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                    "<div class='layui-form-item'>" +
+                                                        "<div class='layui-input-inline'>" +  
+                                                            "<input id='layerPwd2' class='layui-input' name='pwd' placeholder='确认密码' maxlength='16' type='text' autocomplete='off'>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</from>" 
+                                });
+                form.render();           
+        });
      }
 
     $(document).ready(function(){
@@ -116,6 +136,9 @@
                     othis.addClass(anim);
                 });            
             });
+
+           
+
         });
         $(".site-doc-icon .layui-anim").load();
 </script>

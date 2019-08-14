@@ -8,11 +8,16 @@ type UserInfo struct {
 	LastTime string
 	LoginCount int
 	LastIP string
+	Icon string
+	Email string
+	Iphone string
+
 }
 
 type PersonalInfo struct{
 	Username string
 	Nickname string
+	Icon string
 	Coin int
 	Sex string
 	Created string
@@ -24,14 +29,21 @@ type PersonalInfo struct{
 	Sign string
 }
 
-type LoginInfo struct{
-	LastTime string
-	Coin int
-	LastIP string
-	LastAddress string
-}
+// type LoginInfo struct{
+// 	LastTime string
+// 	Coin int
+// 	LastIP string
+// 	LastAddress string
+// }
 
-type LoginInfos struct{
-	Info []LoginInfo
-}
+// type LoginInfos struct{
+// 	Info []LoginInfo
+// }
 
+type GeneralResp struct {
+	Code  int         `json:"code"`
+	Data  interface{} `json:"data"`
+	Error string      `json:"error"`
+ }
+
+//  var question = []string{"你的", "str2", "str3", "str4"}

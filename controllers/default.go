@@ -39,12 +39,10 @@ func (c *MainController) UserInfo()  {
 }
 
 func (c *MainController) Security()  {
-
 	c.TplName= "personal/security.html"
 }
 
 func (c *MainController) Icon()  {
-
 	c.TplName= "personal/icon.html"
 }
 

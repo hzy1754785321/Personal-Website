@@ -21,6 +21,7 @@
                    data: JsonData,
                    success: function(res) {
                     $("#nickName").text(res.Nickname);
+                    $('#userIcon').attr('src', res.Icon); 
                    }
                 });
 
@@ -64,7 +65,7 @@
                         <ul class="layui-nav layui-layout-right">
                           <li class="layui-nav-item">
                             <a href="javascript:;">
-                              <img src="/static/img/pic.jpg" class="layui-nav-img">
+                              <img id="userIcon" src="" class="layui-nav-img">
                               <span id="nickName"></span>
                             </a>
                             <dl class="layui-nav-child">

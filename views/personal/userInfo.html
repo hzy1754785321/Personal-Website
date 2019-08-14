@@ -35,7 +35,7 @@
                </script>
 
         <div class="layui-main">
-            <p align="center"><img src="/static/img/pic.jpg" width="120" height="120" class="layui-circle"></p> 
+            <p align="center"><img id="personIcon" src="/static/img/pic.jpg" width="120" height="120" class="layui-circle"></p> 
             <br>
             <label class="label" id="per_nickName" style="font-size:30px;font-family:'微软雅黑';display: block;text-align: center;">helios</label>
         </div>
@@ -129,6 +129,7 @@
                                                 var cityText = res.Province + "  " + res.City + "  " + res.Area;
                                                 $('#per_city').text(cityText);
                                         }
+                                        $('#personIcon').attr('src', res.Icon); 
                                 }
                         });
                         }
@@ -274,7 +275,6 @@
                         form.on('select(city1)', function(data){
                           chooseCity(cityTag);
                           form.render('select');
-
                         });       
                         form.render();           
                       } 

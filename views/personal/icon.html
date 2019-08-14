@@ -21,7 +21,7 @@
         </script>
 
 <div class="layui-main">
-    <p align="center"><img src="/static/img/pic.jpg" id="icon" width="120" height="120" class="layui-circle"></p> 
+    <p align="center"><img src="" id="icon1" width="120" height="120" class="layui-circle"></p> 
     <br>
     <label class="label" style="font-size:20px;font-family:'微软雅黑';display: block;text-align: center;">当前头像</label>
 </div>
@@ -47,12 +47,34 @@
 </div>
 
 <script>
-    $("#confirm").click(function (){
-        var icon = document.getElementById("icon");
-        var newIcon = document.getElementById("demo30");
-        icon.src = newIcon.src;
-    });
+     function getCookie(sName) {
+                                var aCookie = document.cookie.split("; ");
+                                for (var j = 0; j < aCookie.length; j++) {
+                                        var aCrumb = aCookie[j].split("=");
+                                        if (escape(sName) == aCrumb[0])
+                                        return unescape(aCrumb[1]);
+                                }
+                                return null;
+                                }
 
+    var RefrePersonal = function(){
+          var sessionId = getCookie("sessionID")
+          var JsonData = { sessionID: sessionId};
+          $.ajax({
+                          type: 'post',
+                          url: '/GetSessionPersonal',
+                          data: JsonData,
+                          success: function(res) {
+                              $('#icon1').attr('src', res.Icon); 
+                          }
+          });
+    }
+    RefrePersonal();
+    $("#confirm").click(function (){
+        var icon = document.getElementById("icon1");
+        var headIcon = document.getElementById("userIcon");
+        var newIcon = document.getElementById("demo30");
+    });
     layui.use('upload', function(){
     var $ = layui.jquery
     ,upload = layui.upload;
@@ -60,7 +82,9 @@
    //普通图片上传
    var uploadInst = upload.render({
      elem: '#upload'
-     ,url: '/upload/'
+     ,url: '/UploadFiles'
+     ,auto: false
+     ,bindAction:'#confirm'
      ,before: function(obj){
        //预读本地文件示例，不支持ie8
        obj.preview(function(index, file, result){
@@ -70,19 +94,35 @@
        });
      }
      ,done: function(res){
+      if(res.code == 0){ 
+        var JsonData = { sessionID: sessionId,Icon:res.data};
+          $.ajax({
+                    type: 'post',
+                    url: '/SaveIcon',
+                    data: JsonData,
+                    success: function(res) {
+                          if(res.status == true){        
+                            $('#icon1').attr('src', res.path); 
+                            layer.msg(res.msg);
+                          }else{
+                            layer.msg('上传失败');
+                          }  
+                        }
+                });
+      }
        //如果上传失败
        if(res.code > 0){
-         return layer.msg('上传失败');
+         return layer.msg('上传失败,原因：' + res.error);
        }
        //上传成功
      }
      ,error: function(){
-       //演示失败状态，并实现重传
-       var demoText = $('#demoText');
-       demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-       demoText.find('.demo-reload').on('click', function(){
-         uploadInst.upload();
-       });
+      //演示失败状态，并实现重传
+      //  var demoText = $('#demoText');
+      //  demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+      //  demoText.find('.demo-reload').on('click', function(){
+      //    uploadInst.upload();
+      //  });
      }
    });
  });

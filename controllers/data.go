@@ -68,6 +68,7 @@ func (c *DataController) HandleRegister() {
 		user.Username = username
 		user.Nickname = nickname
 		user.Password = password
+		user.Icon = "/static/img/pic.jpg"
 		user.LoginCount = 1
 		nowTime := time.Now().Format("2006-01-02 15:04:05")
 		user.LastTime = nowTime
@@ -94,7 +95,7 @@ func (c *DataController) GetSessionUserInfo() {
 	var session m.Session
 	json.Unmarshal([]byte(sessionDat),&session)
 	user = session.UserInfoData
-	c.Data["json"] = map[string]interface{}{"Username": user.Username , "Nickname": user.Nickname,"LastTime": user.LastTime}
+	c.Data["json"] = map[string]interface{}{"Username": user.Username , "Nickname": user.Nickname,"LastTime": user.LastTime,"Icon":user.Icon}
 	c.ServeJSON()
 }
 
@@ -132,6 +133,45 @@ func (c *DataController) SavePersonal() {
 	sessionDats, _ := json.Marshal(session)
 	c.SetSession(sessionID,string(sessionDats))
 	c.Data["json"] = map[string]interface{}{"status": false, "msg": "修改成功！"}
+	c.ServeJSON()
+}
+
+func (c *DataController) SaveIcon() {
+	sessionID := c.GetString("sessionID")
+	icon := c.GetString("Icon")
+	sessionTemp := c.GetSession(sessionID)
+	sessionDat, _ := sessionTemp.(string)
+	var session m.Session
+	json.Unmarshal([]byte(sessionDat),&session)
+	session.UserInfoData.Icon = icon
+	session.PersonalData.Icon = icon	
+	perjs, _ := json.Marshal(session.PersonalData)
+	m.SetRedis("personal" + session.PersonalData.Username,string(perjs))
+	loginjs, _ := json.Marshal(session.UserInfoData)
+	m.SetRedis(session.UserInfoData.Username,string(loginjs))
+	sessionDats, _ := json.Marshal(session)
+	c.SetSession(sessionID,string(sessionDats))
+	c.Data["json"] = map[string]interface{}{"status": true, "msg": "修改成功！","path":icon}
+	c.ServeJSON()
+}
+
+func (c *DataController) ChangeSecurity() {
+	sessionID := c.GetString("sessionID")
+	sessionTemp := c.GetSession(sessionID)
+	sessionDat, _ := sessionTemp.(string)
+	var session m.Session
+	json.Unmarshal([]byte(sessionDat),&session)
+	securityType := c.GetString("securityType")
+	switch securityType{
+	case "0": session.UserInfoData.Password = c.GetString("Password")
+	case "1": session.UserInfoData.Email = c.GetString("Email")
+	case "2": session.UserInfoData.Iphone = c.GetString("iphone")
+	}
+	loginjs, _ := json.Marshal(session.UserInfoData)
+	m.SetRedis(session.UserInfoData.Username,string(loginjs))
+	sessionDats, _ := json.Marshal(session)
+	c.SetSession(sessionID,string(sessionDats))
+	c.Data["json"] = map[string]interface{}{"status": true, "msg": "修改成功！"}
 	c.ServeJSON()
 }
 
