@@ -33,19 +33,19 @@
 
     <ul id="securityHeight" class="site-doc-icon site-doc-anim" style="margin-top: 15px;">
             <li style="width: 100%;height: 100%; text-align: center">
-                <div class="layui-anim" data-anim="layui-anim-scale">
-                    <label class="label" style="font-size:30px;font-family:'微软雅黑';">高</label>
+                <div id ="securityHeightColor" class="layui-anim" data-anim="layui-anim-scale">
+                    <label id="securityHeightLabel" class="label" style="font-size:30px;font-family:'微软雅黑';">高</label>
                 </div>
             </li>
     </ul>
 
-    <ul id="securityLow" class="site-doc-icon site-doc-anim" style="margin-top: 15px;">
+    <!-- <ul id="securityLow" class="site-doc-icon site-doc-anim" style="margin-top: 15px;">
             <li style="width: 100%;height: 100%; text-align: center">
                 <div class="layui-anim layui-bg-red" data-anim="layui-anim-scale">
                     <label class="label" style="font-size:30px;font-family:'微软雅黑';">低</label>
                 </div>
             </li>
-    </ul>
+    </ul> -->
 
     <blockquote class="layui-elem-quote layui-quote-nm">
             <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">       
@@ -59,7 +59,7 @@
                     <span class="layui-badge-dot layui-bg-green" ></span>   
                     <text>邮箱：</text>
                     <a ></a>
-                    <a href="javascript:void(0);" onclick = "js_merthod()">已绑定</a>
+                    <a href="javascript:void(0);" onclick = "emailReset()">已绑定</a>
             </div>
     </blockquote>
     <blockquote class="layui-elem-quote layui-quote-nm">
@@ -83,46 +83,19 @@
 
 </div>
 
+<script src="/static/js/security.js"></script>
 <script>
-     var passwdReset = function(){
-        layui.use(['layer','form'], function(){
-        var layer = layui.layer
-        ,form = layui.form
-        layer.open({
-                                        type: 1,
-                                        shift: 7,
-                                        title: false,
-                                        shadeClose: true,
-                                        closeBtn: false,
-                                        area:["380px","330px"],
-                                        skin: 'layui-elem-field',
-                                        content:"<form class='layui-form layui-form-pane' action='' '>" +
-                                                    "<div class='layui-form-item'>" +
-                                                        "<div class='layui-input-inline'>" +                                                               
-                                                            "<input id='layerPwd' class='layui-input' name='pwd' placeholder='密码' maxlength='16' type='text' autocomplete='off'>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                    "<div class='layui-form-item'>" +
-                                                        "<div class='layui-input-inline'>" +  
-                                                            "<input id='layerPwd2' class='layui-input' name='pwd' placeholder='确认密码' maxlength='16' type='text' autocomplete='off'>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</from>" 
-                                });
-                form.render();           
-        });
-     }
-
     $(document).ready(function(){
         $('#securityLow').hide();
     });
     $("#securityHeight").click(function(){
-        $('#securityHeight').hide();
-        $('#securityLow').show();
-    });
-    $("#securityLow").click(function(){
-        $('#securityLow').hide();
-        $('#securityHeight').show();
+        if($('#securityHeightLabel').text() == '高'){
+            $('#securityHeightColor').addClass('layui-bg-red');
+            $('#securityHeightLabel').text('低');
+        }else if($('#securityHeightLabel').text() == '低'){
+            $('#securityHeightColor').removeClass('layui-bg-red')
+            $('#securityHeightLabel').text('高');
+        }
     });
 
         layui.use('jquery', function(){

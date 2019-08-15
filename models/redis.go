@@ -48,3 +48,12 @@ func CheckRedis(key string)(exists bool){
 	}
 	return exists
 }
+
+func SetKeyExpire(key string,time int){
+	conn := pool.Get()
+	defer conn.Close()
+	_, err := conn.Do("expire",key, time)
+	if err != nil {
+		fmt.Println("redis SetExpire failed:", err)
+	}
+}

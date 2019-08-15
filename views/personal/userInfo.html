@@ -93,17 +93,9 @@
         </fieldset>
     </div>
     <script>
-                        function getCookie(sName) {
-                                var aCookie = document.cookie.split("; ");
-                                for (var j = 0; j < aCookie.length; j++) {
-                                        var aCrumb = aCookie[j].split("=");
-                                        if (escape(sName) == aCrumb[0])
-                                        return unescape(aCrumb[1]);
-                                }
-                                return null;
-                        }
+                        
                         var RefrePersonal = function(){
-                        var sessionId = getCookie("sessionID")
+                        // var sessionId = getCookie("sessionID")
                         var JsonData = { sessionID: sessionId};
                         $.ajax({
                                         type: 'post',

@@ -182,3 +182,18 @@ func (p *DataController) getClientIp() string {
 	// s := strings.Split(p.Ctx.Request.RemoteAddr, ":")
 	return ip	
 }
+
+func(c *DataController) CheckPassword() {
+	sessionID := c.GetString("sessionID")
+	sessionTemp := c.GetSession(sessionID)
+	sessionDat, _ := sessionTemp.(string)
+	var session m.Session
+	json.Unmarshal([]byte(sessionDat),&session)
+	password := c.GetString("pwd") 
+	if password != session.UserInfoData.Password {
+		c.Data["json"] = map[string]interface{}{"status": false, "msg": "密码错误"}
+	}else{
+		c.Data["json"] = map[string]interface{}{"status": true, "msg": "密码正确"}
+	}
+	c.ServeJSON()
+}
