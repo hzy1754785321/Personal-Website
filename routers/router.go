@@ -21,4 +21,6 @@ func init() {
 	beego.Router("/personal/security", &controllers.MainController{}, "*:Security")
 	beego.Router("/personal/icon", &controllers.MainController{}, "*:Icon")
 	beego.Router("/UploadFiles", &controllers.SendController{}, "post:UploadFiles")
+	beego.Router("/SendVerifyMail", &controllers.SendController{}, "post:SendVerifyMail")
+	beego.Router("/VerifyMailCode", &controllers.SendController{}, "post:VerifyMailCode")
 }

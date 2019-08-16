@@ -95,7 +95,10 @@ func (c *DataController) GetSessionUserInfo() {
 	var session m.Session
 	json.Unmarshal([]byte(sessionDat),&session)
 	user = session.UserInfoData
-	c.Data["json"] = map[string]interface{}{"Username": user.Username , "Nickname": user.Nickname,"LastTime": user.LastTime,"Icon":user.Icon}
+	userjs, _ := json.Marshal(user)
+	userData := make(map[string]interface{})
+	json.Unmarshal(userjs, &userData)
+	c.Data["json"] = userData
 	c.ServeJSON()
 }
 

@@ -25,7 +25,7 @@ type Sizer interface {
 func SendMail(mailTo []string,subject string, body string ) error {
     mailConn := map[string]string {
         "user": "1754785321@qq.com", 
-        "pass": "",   //授权码
+        "pass": "dudivkb?hzy?xdiwpbggb",   //授权码
         "host": "smtp.qq.com",
         "port": "465",
     }
@@ -42,7 +42,6 @@ func SendMail(mailTo []string,subject string, body string ) error {
 
     err := d.DialAndSend(m)
     return err
-
 }
 
 func (this *SendController) UploadFiles() {
@@ -90,16 +89,16 @@ func (this *SendController) UploadFiles() {
 			 this.Data["json"] = m.GeneralResp{Code: 1, Error: "create upload dir fail:" + err.Error()}
 			 this.ServeJSON()
 			 return
-		  }
+		}
 		 
-		  fpath := uploadDir + h.Filename
-		  err = this.SaveToFile("file", fpath)
-		  if err != nil {
-			 this.Data["json"] = m.GeneralResp{Code: 1, Error: err.Error()}
-			 this.ServeJSON()
-		  }
-		  this.Data["json"] = m.GeneralResp{Code: 0, Data: fpath[1:len(fpath)]}
-		  this.ServeJSON()
+		fpath := uploadDir + h.Filename
+		err = this.SaveToFile("file", fpath)
+		if err != nil {
+			this.Data["json"] = m.GeneralResp{Code: 1, Error: err.Error()}
+			this.ServeJSON()
+		}
+		this.Data["json"] = m.GeneralResp{Code: 0, Data: fpath[1:len(fpath)]}
+		this.ServeJSON()
 	   }
 	} else {
 	   this.Data["json"] = m.GeneralResp{Code: 1, Error: "unable to read file size!"}
@@ -115,22 +114,33 @@ func (this *SendController) UploadFiles() {
 	var session m.Session
 	json.Unmarshal([]byte(sessionDat),&session)
 	emailAddress := s.GetString("email")
-	if m.CheckRedis(emailAddress){
-		s.Data["json"] = map[string]interface{}{"status": false, "msg": "邮箱已绑定"}
-		s.ServeJSON()
-		return
-	}
 	mailTo := []string {
 		emailAddress,
 	}
 	timeNow := time.Now().Format("2006-01-02 15:04")
-	subject := "邮箱绑定"
-	cdkey := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(10000))
-	m.SetRedis("verity" + session.PersonalData.Username, cdkey)
-	m.SetKeyExpire("verity" + session.PersonalData.Username,300)  //设置5分钟Key过期
-	body := fmt.Sprintf("亲爱的 %s，您好！<br><br>您正于 %s 申请绑定hzy网站的邮箱,本次请求的邮件验证码是：<strong>%s</strong>。 本验证码5分钟内有效，请及时输入。<br>如非本人操作，请忽略该邮件。<br>（请不要回复本邮件）",session.UserInfoData.Nickname,timeNow,cdkey)
-	SendMail(mailTo, subject, body)
-	s.Data["json"] = map[string]interface{}{"status": true, "msg": "发送绑定邮件成功！"}
+	controlType := s.GetString("type")
+	if controlType == "bind"{
+		if m.CheckRedis(emailAddress){
+			s.Data["json"] = map[string]interface{}{"status": false, "msg": "邮箱已绑定"}
+			s.ServeJSON()
+			return
+		}	
+		subject := "邮箱绑定"
+		cdkey := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(10000))
+		m.SetRedis("verity" + session.PersonalData.Username, cdkey)
+		m.SetKeyExpire("verity" + session.PersonalData.Username,300)  //设置5分钟Key过期
+		body := fmt.Sprintf("亲爱的 %s，您好！<br><br>您正于 %s 申请绑定hzy网站的邮箱,本次请求的邮件验证码是：<strong>%s</strong>。 本验证码5分钟内有效，请及时输入。<br>如非本人操作，请忽略该邮件。<br>（请不要回复本邮件）",session.UserInfoData.Nickname,timeNow,cdkey)
+		SendMail(mailTo, subject, body)
+		s.Data["json"] = map[string]interface{}{"status": true, "msg": "发送绑定邮件成功！"}
+	}else if controlType == "unbind"{
+		subject := "邮箱解绑"
+		cdkey := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(10000))
+		m.SetRedis("verity" + session.PersonalData.Username, cdkey)
+		m.SetKeyExpire("verity" + session.PersonalData.Username,300)  //设置5分钟Key过期
+		body := fmt.Sprintf("亲爱的 %s，您好！<br><br>您正于 %s 申请解绑hzy网站的邮箱,本次请求的邮件验证码是：<strong>%s</strong>。 本验证码5分钟内有效，请及时输入。<br>如非本人操作，请忽略该邮件。<br>（请不要回复本邮件）",session.UserInfoData.Nickname,timeNow,cdkey)
+		SendMail(mailTo, subject, body)
+		s.Data["json"] = map[string]interface{}{"status": true, "msg": "发送解绑邮件成功！"}
+	}
 	s.ServeJSON()
  }
 
@@ -140,23 +150,45 @@ func (this *SendController) UploadFiles() {
 	sessionDat, _ := sessionTemp.(string)
 	var session m.Session
 	json.Unmarshal([]byte(sessionDat),&session)
-	if m.CheckRedis("verity" + session.PersonalData.Username){
-		cdkey := m.GetRedis("verity" + session.PersonalData.Username)
-		cdkeyUser := s.GetString("cdkey")
-		if cdkey != cdkeyUser {
-			s.Data["json"] = map[string]interface{}{"status": false, "msg": "验证码错误！"}
-		}else {
-			emailAddress := s.GetString("email")
-			m.SetRedis(emailAddress,session.PersonalData.Username)
-			session.UserInfoData.Email = emailAddress
-			loginjs, _ := json.Marshal(session.UserInfoData)
-			m.SetRedis(session.UserInfoData.Username,string(loginjs))
-			sessionDats, _ := json.Marshal(session)
-			s.SetSession(sessionID,string(sessionDats))
-			s.Data["json"] = map[string]interface{}{"status": true, "msg": "绑定成功！"}
+	controlType := s.GetString("type")
+	if controlType == "bind"{
+		if m.CheckRedis("verity" + session.PersonalData.Username){
+			cdkey := m.GetRedis("verity" + session.PersonalData.Username)
+			cdkeyUser := s.GetString("cdkey")
+			if cdkey != cdkeyUser {
+				s.Data["json"] = map[string]interface{}{"status": false, "msg": "验证码错误！"}
+			}else {
+				emailAddress := s.GetString("email")
+				m.SetRedis(emailAddress,session.PersonalData.Username)
+				session.UserInfoData.Email = emailAddress
+				loginjs, _ := json.Marshal(session.UserInfoData)
+				m.SetRedis(session.UserInfoData.Username,string(loginjs))
+				sessionDats, _ := json.Marshal(session)
+				s.SetSession(sessionID,string(sessionDats))
+				s.Data["json"] = map[string]interface{}{"status": true, "msg": "绑定成功！"}
+			}
+		}else{
+			s.Data["json"] = map[string]interface{}{"status": false, "msg": "请先发送验证邮件！"}
 		}
-	}else{
-		s.Data["json"] = map[string]interface{}{"status": false, "msg": "请先发送验证邮件！"}
+	}else if controlType == "unbind"{
+		if m.CheckRedis("verity" + session.PersonalData.Username){
+			cdkey := m.GetRedis("verity" + session.PersonalData.Username)
+			cdkeyUser := s.GetString("cdkey")
+			if cdkey != cdkeyUser {
+				s.Data["json"] = map[string]interface{}{"status": false, "msg": "验证码错误！"}
+			}else {
+				emailAddress := s.GetString("email")
+				m.DeleteRedis(emailAddress)
+				session.UserInfoData.Email = ""
+				loginjs, _ := json.Marshal(session.UserInfoData)
+				m.SetRedis(session.UserInfoData.Username,string(loginjs))
+				sessionDats, _ := json.Marshal(session)
+				s.SetSession(sessionID,string(sessionDats))
+				s.Data["json"] = map[string]interface{}{"status": true, "msg": "解绑成功！"}
+			}
+		}else{
+			s.Data["json"] = map[string]interface{}{"status": false, "msg": "请先发送验证邮件！"}
+		}
 	}
 	s.ServeJSON()
 }

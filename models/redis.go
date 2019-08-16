@@ -57,3 +57,12 @@ func SetKeyExpire(key string,time int){
 		fmt.Println("redis SetExpire failed:", err)
 	}
 }
+
+func DeleteRedis(key string){
+	conn := pool.Get()
+	defer conn.Close()
+	_, err := conn.Do("DEL", key)
+	if err != nil {
+		fmt.Println("redis delelte value failed >>>", err)
+	}
+}

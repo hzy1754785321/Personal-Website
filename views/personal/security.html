@@ -4,7 +4,7 @@
         .site-doc-icon li{width: 222px;}
         .site-doc-icon li .layui-anim{width: 150px; height: 150px; line-height: 150px; margin: 0 auto 10px; text-align: center; background-color: #009688; cursor: pointer; color: #fff; border-radius: 50%;}
 </style>
-
+<link type="text/css" rel="stylesheet" href="/static/css/extra.css" />
 <body>
 <div id="security" class="security-body">
         
@@ -56,18 +56,18 @@
     </blockquote>
     <blockquote class="layui-elem-quote layui-quote-nm">
             <div class="layui-inline" style="width:100%;margin-left: 43%;font-size: 20px">
-                    <span class="layui-badge-dot layui-bg-green" ></span>   
+                    <span id="emailBindState" class="layui-badge-dot layui-bg-green" ></span>   
                     <text>邮箱：</text>
-                    <a ></a>
-                    <a href="javascript:void(0);" onclick = "emailReset()">已绑定</a>
+                    <a id="emailText"></a>
+                    <a id="emailBind" href="javascript:void(0);" onclick = "emailReset()"></a>
             </div>
     </blockquote>
     <blockquote class="layui-elem-quote layui-quote-nm">
             <div class="layui-inline" style="width:100%;margin-left: 41%;font-size: 20px;">       
-                    <span class="layui-badge-dot" ></span>  
+                    <span id="iphoneBindState" class="layui-badge-dot" ></span>  
                     <text>手机号：</text>
-                    <a ></a>
-                    <a href="javascript:void(0);" onclick = "js_merthod()">未绑定</a>            
+                    <a id="iphoneText"></a>
+                    <a id="iphoneBind" href="javascript:void(0);" onclick = "iphoneReset()"></a>            
             </div>
     </blockquote>
     <blockquote class="layui-elem-quote layui-quote-nm">
@@ -86,7 +86,31 @@
 <script src="/static/js/security.js"></script>
 <script>
     $(document).ready(function(){
-        $('#securityLow').hide();
+        var JsonData = { sessionID: sessionId};
+            $.ajax({
+                   type: 'post',
+                   url: '/GetSessionUserInfo',
+                   data: JsonData,
+                   success: function(res) {
+                        if(res.Email == ""){
+                            $("#emailBind").text("未绑定");
+                            $("#emailBindState").removeClass('layui-bg-green');
+                        }else{
+                            $("#emailBind").text("已绑定"); 
+                            $("#emailText").text(res.Email);
+                            $("#emailBindState").addClass('layui-bg-green');
+                        }
+                        if(res.Iphone == ""){
+                            $("#iphoneBind").text("未绑定");
+                            $("#iphoneBindState").removeClass('layui-bg-green');
+                        }else{
+                            $("#iphoneBind").text("已绑定");
+                            $("#iphoneText").text(res.Iphone);
+                            $("#iphoneBindState").removeClass('layui-bg-green');
+                        }
+                    }
+                });
+
     });
     $("#securityHeight").click(function(){
         if($('#securityHeightLabel').text() == '高'){

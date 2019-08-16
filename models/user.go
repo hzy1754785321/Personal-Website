@@ -11,7 +11,6 @@ type UserInfo struct {
 	Icon string
 	Email string
 	Iphone string
-
 }
 
 type PersonalInfo struct{

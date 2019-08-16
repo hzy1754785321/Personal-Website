@@ -87,13 +87,46 @@ var passwdReset = function(){
     layui.use(['layer','form'], function(){
         var layer = layui.layer
         ,form = layui.form
-        layer.open({
+        if($("#emailBind").text() == "已绑定"){
+            layer.open({
+                type: 1,
+                shift: 7,
+                title: false,
+                shadeClose: true,
+                closeBtn: false,
+                area:["410px","300px"],
+                skin: 'layui-elem-field',
+                content:"<fieldset class='layui-elem-field site-demo-button' style='margin-top: 20px;'>" +
+                            "<legend>解绑邮箱</legend>" +
+                        "</fieldset>" +
+                        "<form class='layui-form layui-form-pane' style='margin-top: 20px;' action='' '>" +
+                            "<div class='layui-form-item' style='margin-top: 30px;'>" +
+                                "<label class='layui-form-label'>当前邮箱：</label>" +
+                                
+                                "<label id='bindEmail' style='width : 190px;'  class='layui-form-label '></label>" +
+                          //      "<text id='bindEmail'></text>" +
+                            "</div>" +
+                            "<div class='layui-form-item' style='margin-top: 30px;'>" +
+                                "<label class='layui-form-label'>验证码</label>" +
+                                "<div class='layui-input-inline'>" +                                                               
+                                    "<input id='layerCode' class='layui-input' name='code' placeholder='请输入验证码' maxlength='6' type='text' autocomplete='off'>" +
+                                "</div>" +
+                                "<button id ='sendUnbindMailBtn' style='margin-top: 4px' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-sm'>发送解绑邮件</button>" +
+                            "</div>" +
+                        "</form>" +
+                        "<div style='margin-top: 40px;margin-left: 60px;'>" + 
+                            "<button id ='unBindemailConfirm' type='button' class='layui-btn layui-btn-normal layui-btn-radius'>确定</button>" +
+                            "<button style='margin-left: 60px;' id='emailCancel' type='button' class='layui-btn layui-btn-normal layui-btn-radius'>取消</button>" +
+                        "</div>"
+            });
+        }else if($("#emailBind").text() == "未绑定"){
+            layer.open({
                         type: 1,
                         shift: 7,
                         title: false,
                         shadeClose: true,
                         closeBtn: false,
-                        area:["410px","360px"],
+                        area:["410px","300px"],
                         skin: 'layui-elem-field',
                         content:"<fieldset class='layui-elem-field site-demo-button' style='margin-top: 20px;'>" +
                                     "<legend>绑定邮箱</legend>" +
@@ -102,17 +135,109 @@ var passwdReset = function(){
                                     "<div class='layui-form-item'  style='margin-top: 30px;'>" +
                                         "<label class='layui-form-label'>邮箱</label>" +
                                         "<div class='layui-input-inline'>" +                                                               
-                                            "<input id='layerEmail' class='layui-input' name='email' placeholder='请输入邮箱' maxlength='16' type='text' autocomplete='off'>" +
+                                            "<input id='layerEmail' class='layui-input' name='email' placeholder='请输入邮箱' type='text' autocomplete='off'>" +
                                         "</div>" +
                                     "</div>" +
                                     "<div class='layui-form-item' style='margin-top: 30px;'>" +
                                         "<label class='layui-form-label'>验证码</label>" +
                                         "<div class='layui-input-inline'>" +                                                               
-                                            "<input id='layerCode' class='layui-input' name='code' placeholder='请输入验证码' maxlength='4' type='text' autocomplete='off'>" +
+                                            "<input id='layerCode' class='layui-input' name='code' placeholder='请输入验证码' maxlength='6' type='text' autocomplete='off'>" +
                                         "</div>" +
-                                        "<button id ='sendMailBtn' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-sm'>发送验证邮件</button>" +
+                                        "<button id ='sendMailBtn' style='margin-top: 4px' type='button' class='layui-btn layui-btn-normal layui-btn-radius layui-btn-sm'>发送验证邮件</button>" +
                                     "</div>" +
-                                "</form>"
+                                "</form>" +
+                                "<div style='margin-top: 40px;margin-left: 60px;'>" + 
+                                    "<button id ='emailConfirm' type='button' class='layui-btn layui-btn-normal layui-btn-radius'>确定</button>" +
+                                    "<button style='margin-left: 60px;' id='emailCancel' type='button' class='layui-btn layui-btn-normal layui-btn-radius'>取消</button>" +
+                                "</div>"
+            });
+        }
+        $('#emailCancel').click(function (){
+            layer.closeAll();
         });
+        $('#bindEmail').text($("#emailText").text())
+        var emailAddress = $("#emailText").text()
+        $('#sendUnbindMailBtn').click(function (){
+            var JsonData = { sessionID: sessionId,email: emailAddress,type:"unbind"};
+            $.ajax({
+                        type: 'post',
+                        url: '/SendVerifyMail',
+                        data: JsonData,
+                        success: function(res) {
+                            layer.msg(res.msg);      
+                        }
+            });
+        });
+        $('#unBindemailConfirm').click(function (){   
+            var emailCode = $('#layerCode').val();
+            var emailAddress = $('#bindEmail').val();
+            if(emailCode == ""){
+                layer.msg("请填写验证码");
+                return;
+            }
+            var JsonData = { sessionID: sessionId,email: emailAddress,cdkey: emailCode,type :"unbind"};
+                $.ajax({
+                    type: 'post',
+                    url: '/VerifyMailCode',
+                    data: JsonData,
+                    success: function(res) {
+                        layer.msg(res.msg);
+                        if(res.status){
+                            setTimeout(function () {
+                                layer.closeAll();
+                            },1500);
+                            location.reload() 
+                        }
+                    }
+                });
+        });
+
+        $('#sendMailBtn').click(function (){
+            var emailAddress = $('#layerEmail').val();
+            var sReg = /[_a-zA-Z\d\-\.]+@[_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+$/;
+            if (!sReg.test(emailAddress) ){
+                layer.msg("邮箱填写错误！");
+                return;     
+            }
+            var JsonData = { sessionID: sessionId,email: emailAddress,type:"bind",type :"bind"};
+                    $.ajax({
+                                type: 'post',
+                                url: '/SendVerifyMail',
+                                data: JsonData,
+                                success: function(res) {
+                                    layer.msg(res.msg);      
+                                }
+                    });
+        });
+        $('#emailConfirm').click(function (){    
+            var emailAddress = $('#layerEmail').val();
+            var emailCode = $('#layerCode').val();
+            if(emailCode == ""){
+                layer.msg("请填写验证码");
+                return;
+            }
+            var JsonData = { sessionID: sessionId,email: emailAddress,cdkey: emailCode};
+                $.ajax({
+                    type: 'post',
+                    url: '/VerifyMailCode',
+                    data: JsonData,
+                    success: function(res) {
+                        layer.msg(res.msg);
+                        if(res.status){
+                            setTimeout(function () {
+                                layer.closeAll();
+                            },1500);
+                            location.reload() 
+                        }
+                    }
+                });
+        });
+    });
+}
+
+var iphoneReset = function(){
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        layer.msg("发不起手机验证码！！！")
     });
 }

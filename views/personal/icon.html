@@ -28,15 +28,15 @@
 
 <div class="layui-upload" style="margin-top: 80px">
     <div class="layui-upload-list" style="float:left;width:100;height:100;" >
-          <img class="layui-upload-img layui-circle"  style="margin-left: 300px;width:100;height:100;" layui-circle width="30" height="30"  id="demo30">
+          <img id="demo30" class="layui-upload-img layui-circle"  style="margin-left: 300px;width:100;height:100;" layui-circle width="30" height="30"  id="demo30">
           <p id="demoText" style="margin-left: 295px;font-size:10px">30 * 30</p>
     </div>
     <div class="layui-upload-list" style="float:left;width:100;height:100;">
-        <a href=""> <img class="layui-upload-img layui-circle"  style="margin-left: 120px;" layui-circle width="60" height="60"  id="demo60"></a>
+        <a href=""> <img id="demo60" class="layui-upload-img layui-circle"  style="margin-left: 120px;" layui-circle width="60" height="60"  id="demo60"></a>
         <p id="demoText" style="margin-left: 127px;">60 * 60</p>
     </div>
     <div class="layui-upload-list" style="float:left;width:100;height:100;">
-        <img class="layui-upload-img layui-circle"  style="margin-left: 140px;" layui-circle width="120" height="120"  id="demo120">
+        <img id="demo120" class="layui-upload-img layui-circle"  style="margin-left: 140px;" layui-circle width="120" height="120"  id="demo120">
         <p id="demoText" style="margin-left: 169px;">120 * 120</p>
     </div>
     <div style="clear: both;margin-left: 380px;padding-top: 120px">
@@ -84,15 +84,16 @@
      elem: '#upload'
      ,url: '/UploadFiles'
      ,auto: false
-     ,bindAction:'#confirm'
-     ,before: function(obj){
+     ,choose: function(obj){
        //预读本地文件示例，不支持ie8
        obj.preview(function(index, file, result){
          $('#demo30').attr('src', result); 
          $('#demo60').attr('src', result); 
          $('#demo120').attr('src', result); 
        });
+       
      }
+     ,bindAction:'#confirm'
      ,done: function(res){
       if(res.code == 0){ 
         var JsonData = { sessionID: sessionId,Icon:res.data};
@@ -103,6 +104,7 @@
                     success: function(res) {
                           if(res.status == true){        
                             $('#icon1').attr('src', res.path); 
+                            $('#userIcon').attr('src',res.path);
                             layer.msg(res.msg);
                           }else{
                             layer.msg('上传失败');
