@@ -181,7 +181,7 @@ var passwdReset = function(){
                     url: '/VerifyMailCode',
                     data: JsonData,
                     success: function(res) {
-                        layer.msg(res.msg);
+            //            layer.msg(res.msg);
                         if(res.status){
                             setTimeout(function () {
                                 layer.closeAll();
@@ -216,13 +216,13 @@ var passwdReset = function(){
                 layer.msg("请填写验证码");
                 return;
             }
-            var JsonData = { sessionID: sessionId,email: emailAddress,cdkey: emailCode};
+            var JsonData = { sessionID: sessionId,email: emailAddress,cdkey: emailCode,type:"bind"};
                 $.ajax({
                     type: 'post',
                     url: '/VerifyMailCode',
                     data: JsonData,
                     success: function(res) {
-                        layer.msg(res.msg);
+     //                   layer.msg(res.msg);
                         if(res.status){
                             setTimeout(function () {
                                 layer.closeAll();

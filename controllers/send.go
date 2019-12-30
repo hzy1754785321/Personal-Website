@@ -25,7 +25,7 @@ type Sizer interface {
 func SendMail(mailTo []string,subject string, body string ) error {
     mailConn := map[string]string {
         "user": "1754785321@qq.com", 
-        "pass": "dudivkb?hzy?xdiwpbggb",   //授权码
+        "pass": "dudivkbxdiwpbggb",   //授权码
         "host": "smtp.qq.com",
         "port": "465",
     }

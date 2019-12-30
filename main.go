@@ -7,6 +7,9 @@ import (
 	_ "github.com/astaxie/beego/session/redis"
 	"math/rand"
 	"time"
+	"os/exec"
+	"os"
+	"path/filepath"
 )
 
 var globalSessions *session.Manager
@@ -29,5 +32,40 @@ func init() {
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+	initConfig()
 	beego.Run()
+}
+
+func initConfig() {
+
+rootPath := GetAPPRootPath()
+
+beego.SetViewsPath(rootPath +"/views")
+
+beego.LoadAppConfig("ini", rootPath+"/conf/app.conf")
+
+beego.SetStaticPath("static", rootPath+"/static")
+
+}
+
+func GetAPPRootPath() string {
+
+file, err := exec.LookPath(os.Args[0])
+
+if err != nil {
+
+return ""
+
+  }
+
+p, err := filepath.Abs(file)
+
+if err != nil {
+
+return ""
+
+  }
+
+return filepath.Dir(p)
+
 }
